@@ -4,13 +4,16 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   // Load env file based on `mode` in the current working directory.
-  // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
-  const env = loadEnv(mode, '.', '');
+  // We use process.cwd() to ensure we look in the root.
+  const env = loadEnv(mode, process.cwd(), '');
+  
   return {
     plugins: [react()],
+    // Use relative path to ensure assets load correctly on any domain/subdomain
+    base: './', 
     define: {
-      // This ensures process.env.API_KEY works in the browser after build
-      'process.env.API_KEY': JSON.stringify(env.API_KEY)
+      // Priority: 1. .env file (local) 2. System Env (Vercel/Netlify Dashboard)
+      'process.env.API_KEY': JSON.stringify(env.API_KEY || process.env.API_KEY)
     }
   };
 });
