@@ -10,7 +10,7 @@ export default defineConfig(({ mode }) => {
     plugins: [react()],
     define: {
       // This ensures process.env.API_KEY works in the browser after build
-      '01KB8N7HRZMRKDHHEKPYZ1K7PJ': JSON.stringify(env.API_KEY)
+      'process.env.API_KEY': JSON.stringify(env.API_KEY)
     }
   };
 });
